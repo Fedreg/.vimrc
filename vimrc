@@ -29,7 +29,9 @@ let mapleader = "\<Space>"
 set nocompatible                                                                                                                                                                                                                                                              
                                                                                                                                                                                                                                                                               
 call plug#begin('~/.vim/plugged')                                                                                                                                                                                                                                             
-Plug 'ajh17/vimcompletesme'                                                                                                                                                                                                                                                   
+Plug 'ajh17/vimcompletesme'   
+Plug 'godlygeek/tabular'
+Plug 'plasticboy/vim-markdown'
 Plug 'othree/yajs.vim', { 'for': 'javascript'}                                                                                                                                                                                                                                
 Plug 'othree/es.next.syntax.vim'                                                                                                                                                                                                                                              
 Plug 'elzr/vim-json'                                                                                                                                                                                                                                                          
