@@ -45,6 +45,12 @@ set foldmethod=indent
 " Start with folds open.  zC closes all; zR opens all
 set nofoldenable
 
+" Clean Whitespace from file with SPACE W
+nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
+
+" No Highlight remains after search
+nnoremap <CR> :noh<CR><CR>
+
 """"""""""""""""""""""""""""""""""""""""""""""""""
 "
 " PLUGINS
@@ -68,6 +74,7 @@ Plug 'liquidz/vim-iced-coc-source',      {'for': 'clojure'}
 Plug 'morhetz/gruvbox'
 Plug 'neoclide/coc.nvim',                {'branch': 'release'}
 Plug 'radenling/vim-dispatch-neovim'
+Plug 'rigellute/rigel'
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-dadbod'
@@ -84,7 +91,7 @@ call plug#end()
 " Theme
 syntax enable 
 set background=dark
-colorscheme landscape 
+colorscheme rigel
 "let g:lightline = { 'colorscheme': 'landscape' }
 
 au VimEnter * RainbowParentheses
@@ -110,7 +117,7 @@ let g:mkdp_auto_start = 1
 
 "let g:iced_enable_default_key_mappings = v:true
 let g:iced#buffer#stdout#mods = 'vertical'
-let g:iced#popup#neovim#winhighlight = 'Normal:Normal'
+"let g:iced#popup#neovim#winhighlight = 'Normal:Normal'
 let g:iced_enable_clj_kondo_analysis = v:true
 
 nmap <Leader>'  <Plug>(iced_connect)
@@ -155,40 +162,72 @@ nmap <Leader>sq <Plug>(iced_stdout_buffer_close)
 xmap ga <Plug>(EasyAlign)
 " motion mode
 nmap ga <Plug>(EasyAlign)
+" clojure specific
+nnoremap <buffer> <leader>a[ vi[<c-v>$:EasyAlign\ g/^\S/<cr>gv=
+nnoremap <buffer> <leader>a{ vi{<c-v>$:EasyAlign\ g/^\S/<cr>gv=
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
 "
-" Keymaps
+" Navigation
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""
 
 " Use JK instead of ESC
 imap jk <Esc>
 
+" Use ESC to exit neovim terminal
+tnoremap jk <C-\><C-n>
+
+" Navigation
 map <C-k> <C-w><Up>
 map <C-j> <C-w><Down>
 map <C-l> <C-w><Right>
 map <C-h> <C-w><Left>
 
-noremap <Leader>l <C-^>
-" Ag word under cursor
-noremap <Leader>b :Buffers<CR>
-noremap <Leader>d :exe ':Ag ' . expand('<cword>')<CR>
-" 'V' for visited
-noremap <Leader>v :History<CR> 
-noremap <Leader>f :Ag<CR>
-noremap <Leader>z :FZF<CR>
-noremap <Leader>gs :vert G<CR>
 " Use TAB to jump to matching brace (like %)
 noremap <tab> %
-" Clean Whitespace from file with SPACE W
-nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
-" No Highlight remains after search
-nnoremap <CR> :noh<CR><CR>
-" Use ESC to exit neovim terminal
-tnoremap jk <C-\><C-n>
 
+""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" Searching
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" Last visited buffer
+noremap <Leader>l <C-^>
+
+noremap <Leader>b :Buffers<CR>
+
+" Ag word under cursor
+noremap <Leader>d :exe ':Ag ' . expand('<cword>')<CR>
+
+" 'V' for visited
+noremap <Leader>v :History<CR> 
+
+noremap <Leader>f :Ag<CR>
+
+noremap <Leader>z :FZF<CR>
+
+" Git Status
+noremap <Leader>gs :vert G<CR>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""
+"
 " Key Reminders
+" 
+""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" VIM
+""""""""""""""""""""""""""""""""""""""""""""""""""
 " Ctrl + Z : suspend
 " fg       : resume
 "
+"
+" TMUX
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" tmux kill-server - kill all sessions
+" set -g status off - kill status line
+" Ctrl + b $ - rename session
+" Ctrl + b c - new window
+" Ctrl + b & - kill window
+" Ctrl + b , - rename window
+
