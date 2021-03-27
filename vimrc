@@ -10,8 +10,10 @@ set nocompatible
 " This lets you used UNDO even after you close and reopen a file.
 set undofile
 
+set noswapfile
+
 " Leader
-let mapleader = " "
+let mapleader = " " 
 let maplocalleader = ","
 
 "save current buffer
@@ -24,8 +26,7 @@ autocmd BufLeave,FocusLost * silent! wall
 nnoremap <leader>* :%s/\<<c-r><c-w>\>//g<left><left>
 
 " Case insensitive if lowercase search; sensitive if upper...
-set ignorecase
-set smartcase
+set ignorecase smartcase
 
 " Don't need /g in searches
 set gdefault
@@ -50,6 +51,10 @@ nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
 " No Highlight remains after search
 nnoremap <CR> :noh<CR><CR>
 
+" quickly edit this file
+:nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+:nnoremap <leader>sv :source $MYVIMRC<cr>
+
 """"""""""""""""""""""""""""""""""""""""""""""""""
 "
 " PLUGINS
@@ -69,10 +74,11 @@ Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'kristijanhusak/vim-dadbod-ui'
 Plug 'neoclide/coc.nvim',                {'branch': 'release'}
-Plug 'scrooloose/nerdcommenter'
+Plug 'sjl/badwolf'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-dadbod'
 Plug 'tpope/vim-fireplace',              {'for': 'clojure'}
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-dadbod'
 
 call plug#end()
 
@@ -102,23 +108,22 @@ set noshowmode
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""
 
-let g:mkdp_auto_start = 1
+let g:mkdp_auto_start = 0
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
 "
 " Fireplace 
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""
-nmap <Leader>eb :Require<CR>
-nmap <Leader>ee cpp
-nmap <Leader>ss :Last<CR>
-nmap <Leader>sq <C-w>z
-nmap <Leader>sp :lprevious<CR>
-nmap <Leader>sn :lnext<CR>
-nmap <Leader>st <C-w>H
-nmap <Leader>tn :RunTests<CR>
-nmap <Leader>tt :.RunTests<CR>
-nmap <Leader><C-]> [<C-D>
+nnoremap <Leader>eb :w<CR> :Require<CR>
+nnoremap <Leader>ee cpp
+nnoremap <Leader>ss :Last<CR><C-w>H
+nnoremap <Leader>sq <C-w>z
+nnoremap <Leader>sp :lprevious<CR>
+nnoremap <Leader>sn :lnext<CR>
+nnoremap <Leader>tn :RunTests<CR>
+nnoremap <Leader>tt :.RunTests<CR>
+nnoremap <Leader><C-]> [<C-D>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
 "
@@ -129,7 +134,7 @@ nmap <Leader><C-]> [<C-D>
 " visual mode
 xmap ga <Plug>(EasyAlign)
 " motion mode
-nmap ga <Plug>(EasyAlign)
+nnoremap ga <Plug>(EasyAlign)
 " clojure specific
 nnoremap <buffer> <leader>a[ vi[<c-v>$:EasyAlign\ g/^\S/<cr>gv=
 nnoremap <buffer> <leader>a{ vi{<c-v>$:EasyAlign\ g/^\S/<cr>gv=
@@ -143,16 +148,16 @@ let g:sexp_enable_insert_mode_mappings = 0
 """"""""""""""""""""""""""""""""""""""""""""""""""
 
 " Use JK instead of ESC
-imap jk <Esc>
+inoremap jk <Esc>
 
 " Use ESC to exit neovim terminal
 tnoremap jk <C-\><C-n>
 
 " Navigation
-map <C-k> <C-w><Up>
-map <C-j> <C-w><Down>
-map <C-l> <C-w><Right>
-map <C-h> <C-w><Left>
+noremap <C-k> <C-w><Up>
+noremap <C-j> <C-w><Down>
+noremap <C-l> <C-w><Right>
+noremap <C-h> <C-w><Left>
 
 " Use TAB to jump to matching brace (like %)
 noremap <tab> %
@@ -198,5 +203,3 @@ noremap <Leader>gp :vert Git push<CR>
 " PREFIX & - kill window
 " PREFIX , - rename window
 " PREFIX w - list windows
-
-
