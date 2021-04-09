@@ -53,7 +53,8 @@ nnoremap <CR> :noh<CR><CR>
 
 " quickly edit this file
 :nnoremap <leader>ev :vsplit $MYVIMRC<cr>
-:nnoremap <leader>sv :source $MYVIMRC<cr>
+:nnoremap <leader>sv :w<cr> :source $MYVIMRC<cr>
+:nnoremap <leader>sf :w<cr> :source %<cr>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
 "
@@ -79,6 +80,8 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-dadbod'
 Plug 'tpope/vim-fireplace',              {'for': 'clojure'}
 Plug 'tpope/vim-fugitive'
+Plug 'pineapplegiant/spaceduck',         { 'branch': 'main' }
+Plug 'vlime/vlime',                      {'rtp': 'vim/', 'for': 'lisp'}
 
 call plug#end()
 
@@ -91,8 +94,8 @@ call plug#end()
 " Theme
 syntax enable 
 set background=dark
-colorscheme deus
-let g:lightline = { 'colorscheme': 'deus' }
+colorscheme spaceduck
+let g:lightline = { 'colorscheme': 'spaceduck' }
 set termguicolors
 
 au VimEnter * RainbowParentheses
@@ -184,7 +187,7 @@ noremap <Leader>z :FZF<CR>
 
 " Git Status
 noremap <Leader>gs :vert G<CR>
-noremap <Leader>gb :vert Gblame<CR>
+noremap <Leader>gb :vert Git blame<CR>
 noremap <Leader>gp :vert Git push<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
