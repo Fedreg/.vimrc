@@ -1,9 +1,30 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""
-"
-" BASICS
-"
+" PLUGINS
 """"""""""""""""""""""""""""""""""""""""""""""""""
+call plug#begin('~/.vim/plugged')
 
+Plug 'fedreg/clj-debug', {'for': 'clojure'}
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'junegunn/rainbow_parentheses.vim'
+Plug 'junegunn/vim-easy-align'
+Plug 'kristijanhusak/vim-dadbod-ui'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-dadbod'
+Plug 'tpope/vim-fireplace', {'for': 'clojure'}
+Plug 'tpope/vim-fugitive'
+
+" Colors
+Plug 'ajmwagar/vim-deus'
+Plug 'itchyny/lightline.vim'
+Plug 'RohanPoojary/pleasant.vim'
+
+call plug#end()
+
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" BASICS
+""""""""""""""""""""""""""""""""""""""""""""""""""
 " Don't worry about compatibility with VI
 set nocompatible 
 " Create <FILENAME>.un~ files whenever you edit a file.
@@ -11,7 +32,8 @@ set nocompatible
 set undofile
 
 set noswapfile
-
+" Don't show omnicomplete scratch window
+set completeopt-=preview
 " Leader
 let mapleader = " " 
 let maplocalleader = ","
@@ -57,66 +79,28 @@ nnoremap <CR> :noh<CR><CR>
 :nnoremap <leader>sf :w<cr> :source %<cr>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
-"
-" PLUGINS
-"
-""""""""""""""""""""""""""""""""""""""""""""""""""
-
-call plug#begin('~/.vim/plugged')
-
-Plug 'ajmwagar/vim-deus'
-Plug 'clojure-vim/async-clj-omni',       {'for': 'clojure'}
-Plug 'guns/vim-sexp',                    {'for': 'clojure'}
-Plug 'iamcco/markdown-preview.nvim',     { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
-Plug 'itchyny/lightline.vim'
-Plug 'junegunn/fzf',                     { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
-Plug 'junegunn/rainbow_parentheses.vim'
-Plug 'junegunn/vim-easy-align'
-Plug 'kristijanhusak/vim-dadbod-ui'
-Plug 'neoclide/coc.nvim',                {'branch': 'release'}
-Plug 'sjl/badwolf'
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-dadbod'
-Plug 'tpope/vim-fireplace',              {'for': 'clojure'}
-Plug 'tpope/vim-fugitive'
-Plug 'pineapplegiant/spaceduck',         { 'branch': 'main' }
-Plug 'vlime/vlime',                      {'rtp': 'vim/', 'for': 'lisp'}
-
-call plug#end()
-
-""""""""""""""""""""""""""""""""""""""""""""""""""
-"
 " UI
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""
-
 " Theme
 syntax enable 
 set background=dark
-colorscheme spaceduck
-let g:lightline = { 'colorscheme': 'spaceduck' }
 set termguicolors
+colorscheme pleasant
+let g:lightline = { 'colorscheme': 'pleasant' }
 
 au VimEnter * RainbowParentheses
-
 " Show matching brackets
 set showmatch
 " Don't show -- INSERT -- under status line
 set noshowmode
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
-"
 " Markdown
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""
-
 let g:mkdp_auto_start = 0
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
-"
 " Fireplace 
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""
 nnoremap <Leader>eb :w<CR> :Require<CR>
 nnoremap <Leader>ee cpp
@@ -129,27 +113,16 @@ nnoremap <Leader>tt :.RunTests<CR>
 nnoremap <Leader><C-]> [<C-D>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
-"
 " EasyAlign
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""
-
 " visual mode
 xmap ga <Plug>(EasyAlign)
 " motion mode
-nnoremap ga <Plug>(EasyAlign)
-" clojure specific
-nnoremap <buffer> <leader>a[ vi[<c-v>$:EasyAlign\ g/^\S/<cr>gv=
-nnoremap <buffer> <leader>a{ vi{<c-v>$:EasyAlign\ g/^\S/<cr>gv=
-
-let g:sexp_enable_insert_mode_mappings = 0
+nmap ga <Plug>(EasyAlign)
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
-"
 " Navigation
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""
-
 " Use JK instead of ESC
 inoremap jk <Esc>
 
@@ -166,43 +139,29 @@ noremap <C-h> <C-w><Left>
 noremap <tab> %
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
-"
+" Completion
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" Use Tab for autocomplete in insert mode
+inoremap <TAB> <C-X><C-O>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""
 "Searching
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " Last visited buffer
 noremap <Leader>l <C-^>
-
 noremap <Leader>b :Buffers<CR>
-
 " Ag word under cursor
 noremap <Leader>d :exe ':Ag ' . expand('<cword>')<CR>
-
 " 'V' for visited
 noremap <Leader>v :History<CR> 
-
 noremap <Leader>f :Ag<CR>
-
 noremap <Leader>z :FZF<CR>
 
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" Git
+""""""""""""""""""""""""""""""""""""""""""""""""""
 " Git Status
 noremap <Leader>gs :vert G<CR>
 noremap <Leader>gb :vert Git blame<CR>
 noremap <Leader>gp :vert Git push<CR>
 
-""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-" Key Reminders
-" 
-""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" TMUX
-""""""""""""""""""""""""""""""""""""""""""""""""""
-" tmux kill-server - kill all sessions
-" set -g status off - kill status line
-"
-" PREFIX $ - rename session
-" PREFIX c - new window
-" PREFIX & - kill window
-" PREFIX , - rename window
-" PREFIX w - list windows
