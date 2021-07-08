@@ -3,22 +3,26 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""
 call plug#begin('~/.vim/plugged')
 
-Plug 'fedreg/clj-debug', {'for': 'clojure'}
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+" Plug 'fedreg/vim-clj-debug',            {'for': 'clojure'}
+" Plug 'fedreg/vim-fireplace-plus',       {'for': 'clojure'}
+" Plug 'neovim/nvim-lspconfig'
+Plug 'iamcco/markdown-preview.nvim',    { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+Plug 'junegunn/fzf',                    { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'kristijanhusak/vim-dadbod-ui'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-dadbod'
-Plug 'tpope/vim-fireplace', {'for': 'clojure'}
+Plug 'tpope/vim-fireplace',             {'for': 'clojure'}
 Plug 'tpope/vim-fugitive'
+Plug 'venantius/vim-cljfmt',            {'for': 'clojure'}
+Plug 'zaptic/elm-vim',                  {'for': 'elm'}
 
 " Colors
 Plug 'ajmwagar/vim-deus'
+Plug 'ayu-theme/ayu-vim'
 Plug 'itchyny/lightline.vim'
-Plug 'RohanPoojary/pleasant.vim'
 
 call plug#end()
 
@@ -26,7 +30,7 @@ call plug#end()
 " BASICS
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " Don't worry about compatibility with VI
-set nocompatible 
+set nocompatible
 " Create <FILENAME>.un~ files whenever you edit a file.
 " This lets you used UNDO even after you close and reopen a file.
 set undofile
@@ -35,17 +39,15 @@ set noswapfile
 " Don't show omnicomplete scratch window
 set completeopt-=preview
 " Leader
-let mapleader = " " 
+let mapleader = " "
 let maplocalleader = ","
-
+" 2 space indent
+set shiftwidth=2
 "save current buffer
 nnoremap <leader>w :w<cr>
 
 " Autosave on loss of focus
 autocmd BufLeave,FocusLost * silent! wall
-
-"replace the word under cursor
-nnoremap <leader>* :%s/\<<c-r><c-w>\>//g<left><left>
 
 " Case insensitive if lowercase search; sensitive if upper...
 set ignorecase smartcase
@@ -62,7 +64,7 @@ set updatetime=5000
 " Make linux clipboard more like Mac, single
 set clipboard=unnamedplus
 
-set foldmethod=indent
+set foldmethod=manual
 " Start with folds open.  zC closes all; zR opens all
 set nofoldenable
 " Highlight the words you're going to replace
@@ -82,11 +84,12 @@ nnoremap <CR> :noh<CR><CR>
 " UI
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " Theme
-syntax enable 
+syntax enable
 set background=dark
 set termguicolors
-colorscheme pleasant
-let g:lightline = { 'colorscheme': 'pleasant' }
+colorscheme ayu
+let ayucolor='dark' " or mirage, light
+let g:lightline = { 'colorscheme': 'ayu' }
 
 au VimEnter * RainbowParentheses
 " Show matching brackets
@@ -98,9 +101,10 @@ set noshowmode
 " Markdown
 """"""""""""""""""""""""""""""""""""""""""""""""""
 let g:mkdp_auto_start = 0
+let g:markdown_folding = 1
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
-" Fireplace 
+" Fireplace
 """"""""""""""""""""""""""""""""""""""""""""""""""
 nnoremap <Leader>eb :w<CR> :Require<CR>
 nnoremap <Leader>ee cpp
@@ -111,6 +115,11 @@ nnoremap <Leader>sn :lnext<CR>
 nnoremap <Leader>tn :RunTests<CR>
 nnoremap <Leader>tt :.RunTests<CR>
 nnoremap <Leader><C-]> [<C-D>
+
+" firplace+
+nnoremap <Leader>xi :DbxInstrument<CR>
+nnoremap <Leader>xu :DbxUnstrument<CR>
+let g:clj_fmt_autosave = 0
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " EasyAlign
@@ -153,7 +162,7 @@ noremap <Leader>b :Buffers<CR>
 " Ag word under cursor
 noremap <Leader>d :exe ':Ag ' . expand('<cword>')<CR>
 " 'V' for visited
-noremap <Leader>v :History<CR> 
+noremap <Leader>v :History<CR>
 noremap <Leader>f :Ag<CR>
 noremap <Leader>z :FZF<CR>
 
