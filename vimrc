@@ -4,25 +4,22 @@
 call plug#begin('~/.vim/plugged')
 
 " Plug 'fedreg/vim-clj-debug',            {'for': 'clojure'}
-" Plug 'fedreg/vim-fireplace-plus',       {'for': 'clojure'}
-" Plug 'neovim/nvim-lspconfig'
+Plug 'fedreg/vim-fireplace-plus',       {'for': 'clojure'}
 Plug 'iamcco/markdown-preview.nvim',    { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+Plug 'itchyny/lightline.vim'
 Plug 'junegunn/fzf',                    { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'kristijanhusak/vim-dadbod-ui'
+Plug 'kristijanhusak/vim-dadbod-completion'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-dadbod'
 Plug 'tpope/vim-fireplace',             {'for': 'clojure'}
 Plug 'tpope/vim-fugitive'
 Plug 'venantius/vim-cljfmt',            {'for': 'clojure'}
 Plug 'zaptic/elm-vim',                  {'for': 'elm'}
-
-" Colors
-Plug 'ajmwagar/vim-deus'
-Plug 'ayu-theme/ayu-vim'
-Plug 'itchyny/lightline.vim'
+Plug 'Fedreg/deeper-blue.vim'
 
 call plug#end()
 
@@ -31,18 +28,22 @@ call plug#end()
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " Don't worry about compatibility with VI
 set nocompatible
-" Create <FILENAME>.un~ files whenever you edit a file.
-" This lets you used UNDO even after you close and reopen a file.
-set undofile
 
+" Create <FILENAME>.un~files whenever you edit a file.
+" This lets you used UNDO even after you close and reoen a file.
+set undofile
 set noswapfile
+
 " Don't show omnicomplete scratch window
 set completeopt-=preview
+
 " Leader
 let mapleader = " "
 let maplocalleader = ","
+
 " 2 space indent
 set shiftwidth=2
+
 "save current buffer
 nnoremap <leader>w :w<cr>
 
@@ -65,10 +66,13 @@ set updatetime=5000
 set clipboard=unnamedplus
 
 set foldmethod=manual
+
 " Start with folds open.  zC closes all; zR opens all
 set nofoldenable
+
 " Highlight the words you're going to replace
 set inccommand=split
+
 " Clean Whitespace from file ith SPACE W
 nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
 
@@ -83,13 +87,30 @@ nnoremap <CR> :noh<CR><CR>
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " UI
 """"""""""""""""""""""""""""""""""""""""""""""""""
+
 " Theme
 syntax enable
 set background=dark
 set termguicolors
-colorscheme ayu
-let ayucolor='dark' " or mirage, light
-let g:lightline = { 'colorscheme': 'ayu' }
+colorscheme deeper-blue
+highlight VertSplit cterm=NONE
+let g:lightline = {
+            \ 'colorscheme': 'one',
+            \ 'active': {
+            \   'left': [ [ 'mode', 'paste' ],
+            \             [ 'readonly', 'filename', 'modified'] ],
+            \   'right': [ [ 'gitbranch' ],
+            \              [ 'filetype' ],
+            \              [ 'lineinfo', 'percent' ] ]
+            \ },
+            \ 'component': {
+            \   'charvaluehex': '0x%B'
+            \ },
+            \ 'component_function': {
+            \   'gitbranch': 'fugitive#head'
+            \ }
+            \ }
+" }}}
 
 au VimEnter * RainbowParentheses
 " Show matching brackets
