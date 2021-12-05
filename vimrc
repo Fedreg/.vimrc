@@ -1,31 +1,30 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGINS
 """"""""""""""""""""""""""""""""""""""""""""""""""
+
 call plug#begin('~/.vim/plugged')
 
-" Plug 'fedreg/vim-clj-debug',            {'for': 'clojure'}
-Plug 'fedreg/vim-fireplace-plus',       {'for': 'clojure'}
-Plug 'iamcco/markdown-preview.nvim',    { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
-Plug 'itchyny/lightline.vim'
-Plug 'junegunn/fzf',                    { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'bakpakin/fennel.vim'
+Plug 'fedreg/deeper-blue.vim'
+Plug 'fedreg/tsdh-dark.vim'
+Plug 'bluz71/vim-moonfly-statusline'
+Plug 'guns/vim-sexp'
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'junegunn/vim-easy-align'
-Plug 'kristijanhusak/vim-dadbod-ui'
-Plug 'kristijanhusak/vim-dadbod-completion'
+Plug 'Olical/conjure'
 Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-dadbod'
-Plug 'tpope/vim-fireplace',             {'for': 'clojure'}
 Plug 'tpope/vim-fugitive'
-Plug 'venantius/vim-cljfmt',            {'for': 'clojure'}
-Plug 'zaptic/elm-vim',                  {'for': 'elm'}
-Plug 'Fedreg/deeper-blue.vim'
+Plug 'tpope/vim-sexp-mappings-for-regular-people'
+Plug 'tpope/vim-vinegar'
 
 call plug#end()
 
-""""""""""""""""""""""""""""""""""""""""""""""""""
-" BASICS
-""""""""""""""""""""""""""""""""""""""""""""""""""
+" """"""""""""""""""""""""""""""""""""""""""""""""""
+" BASICS 
+" """"""""""""""""""""""""""""""""""""""""""""""""""
 " Don't worry about compatibility with VI
 set nocompatible
 
@@ -43,9 +42,6 @@ let maplocalleader = ","
 
 " 2 space indent
 set shiftwidth=2
-
-"save current buffer
-nnoremap <leader>w :w<cr>
 
 " Autosave on loss of focus
 autocmd BufLeave,FocusLost * silent! wall
@@ -92,26 +88,9 @@ nnoremap <CR> :noh<CR><CR>
 syntax enable
 set background=dark
 set termguicolors
-colorscheme deeper-blue
-highlight VertSplit cterm=NONE
-let g:lightline = {
-            \ 'colorscheme': 'one',
-            \ 'active': {
-            \   'left': [ [ 'mode', 'paste' ],
-            \             [ 'readonly', 'filename', 'modified'] ],
-            \   'right': [ [ 'gitbranch' ],
-            \              [ 'filetype' ],
-            \              [ 'lineinfo', 'percent' ] ]
-            \ },
-            \ 'component': {
-            \   'charvaluehex': '0x%B'
-            \ },
-            \ 'component_function': {
-            \   'gitbranch': 'fugitive#head'
-            \ }
-            \ }
-" }}}
-
+colorscheme tsdh-dark
+" colorscheme deeper-blue
+" highlight nontext ctermbg=000000
 au VimEnter * RainbowParentheses
 " Show matching brackets
 set showmatch
@@ -125,22 +104,13 @@ let g:mkdp_auto_start = 0
 let g:markdown_folding = 1
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
-" Fireplace
+" Conjure
 """"""""""""""""""""""""""""""""""""""""""""""""""
-nnoremap <Leader>eb :w<CR> :Require<CR>
-nnoremap <Leader>ee cpp
-nnoremap <Leader>ss :Last<CR><C-w>H
-nnoremap <Leader>sq <C-w>z
-nnoremap <Leader>sp :lprevious<CR>
-nnoremap <Leader>sn :lnext<CR>
-nnoremap <Leader>tn :RunTests<CR>
-nnoremap <Leader>tt :.RunTests<CR>
-nnoremap <Leader><C-]> [<C-D>
+highlight NormalFloat ctermbg=000000
 
-" firplace+
-nnoremap <Leader>xi :DbxInstrument<CR>
-nnoremap <Leader>xu :DbxUnstrument<CR>
-let g:clj_fmt_autosave = 0
+let g:conjure#client#clojure#nrepl#action#out_subscribe = v:true
+let g:conjure#client#clojure#nrepl#eval#raw_out = v:true 
+let g:conjure#log#wrap = v:true 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " EasyAlign
@@ -168,6 +138,19 @@ noremap <C-h> <C-w><Left>
 " Use TAB to jump to matching brace (like %)
 noremap <tab> %
 
+" Last visited buffer
+noremap <Leader>l <C-^>
+
+" Find last accessed buffer for TAB completion
+set wildmode=full:lastused
+
+nnoremap <Leader>bn :bn<CR>
+nnoremap <Leader>bp :bp<CR>
+nnoremap <Leader>bl :Buffers<CR>
+
+" Jump back from jump-list
+noremap <LocalLeader>gb <C-o>
+
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " Completion
 """"""""""""""""""""""""""""""""""""""""""""""""""
@@ -177,9 +160,6 @@ inoremap <TAB> <C-X><C-O>
 """"""""""""""""""""""""""""""""""""""""""""""""""
 "Searching
 """"""""""""""""""""""""""""""""""""""""""""""""""
-" Last visited buffer
-noremap <Leader>l <C-^>
-noremap <Leader>b :Buffers<CR>
 " Ag word under cursor
 noremap <Leader>d :exe ':Ag ' . expand('<cword>')<CR>
 " 'V' for visited
@@ -193,5 +173,40 @@ noremap <Leader>z :FZF<CR>
 " Git Status
 noremap <Leader>gs :vert G<CR>
 noremap <Leader>gb :vert Git blame<CR>
-noremap <Leader>gp :vert Git push<CR>
+noremap <Leader>gp :vert Git pull<CR>
+noremap <Leader>gP! :vert Git push<CR>
 
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" Macros
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" Surround word with double quotes
+let @z = 'i"jklxx$a"jk0j'
+
+" Cheat Sheet!
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" FS
+" CTRL-G prints current file with full path (from root). press 1 first to get
+" full path from $HOME
+"
+" :e + SPACE + CTRL-D is like :explore in quick-fix window
+" 
+" SEXP
+" slurp/barf: >), <), >(, and <( 
+" form: >f <f
+" el:   >e <e
+"
+" PRs
+" :G difftool -y [BRANCH] opens tabs of all diffs
+"
+" REGISTERS 
+" :reg to see all; "2p to paste, etc
+"
+" Tmux:
+" Kill all processes: tmux kill-server
+" PREFIX: Ctrl + b
+" Rename window: PREFIX + ,
+" new window: PREFIX + c
+" next window: PREFIX + n
+" prev window: PREFIX + p
+" list windowns: PREFIX + w
+" search mode: PREFIX + [
