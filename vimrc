@@ -1,15 +1,13 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGINS
 """"""""""""""""""""""""""""""""""""""""""""""""""
-
 call plug#begin('~/.vim/plugged')
 
 Plug 'bakpakin/fennel.vim'
-Plug 'fedreg/deeper-blue.vim'
 Plug 'fedreg/tsdh-dark.vim'
-Plug 'bluz71/vim-moonfly-statusline'
 Plug 'guns/vim-sexp'
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 
+                                      \'for': ['markdown', 'vim-plug']}
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/rainbow_parentheses.vim'
@@ -23,7 +21,7 @@ Plug 'tpope/vim-vinegar'
 call plug#end()
 
 " """"""""""""""""""""""""""""""""""""""""""""""""""
-" BASICS 
+" BASICS
 " """"""""""""""""""""""""""""""""""""""""""""""""""
 " Don't worry about compatibility with VI
 set nocompatible
@@ -61,9 +59,8 @@ set updatetime=5000
 " Make linux clipboard more like Mac, single
 set clipboard=unnamedplus
 
-set foldmethod=manual
-
 " Start with folds open.  zC closes all; zR opens all
+set foldmethod=manual
 set nofoldenable
 
 " Highlight the words you're going to replace
@@ -78,7 +75,6 @@ nnoremap <CR> :noh<CR><CR>
 " quickly edit this file
 :nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 :nnoremap <leader>sv :w<cr> :source $MYVIMRC<cr>
-:nnoremap <leader>sf :w<cr> :source %<cr>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " UI
@@ -89,7 +85,6 @@ syntax enable
 set background=dark
 set termguicolors
 colorscheme tsdh-dark
-" colorscheme deeper-blue
 " highlight nontext ctermbg=000000
 au VimEnter * RainbowParentheses
 " Show matching brackets
@@ -107,29 +102,26 @@ let g:markdown_folding = 1
 " Conjure
 """"""""""""""""""""""""""""""""""""""""""""""""""
 highlight NormalFloat ctermbg=000000
-
 let g:conjure#client#clojure#nrepl#action#out_subscribe = v:true
-let g:conjure#client#clojure#nrepl#eval#raw_out = v:true 
-let g:conjure#log#wrap = v:true 
+let g:conjure#client#clojure#nrepl#eval#raw_out = v:true
+let g:conjure#log#wrap = v:true
+let g:conjure#filetype#fennel = "conjure.client.fennel.stdio"
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " EasyAlign
 """"""""""""""""""""""""""""""""""""""""""""""""""
-" visual mode
 xmap ga <Plug>(EasyAlign)
-" motion mode
 nmap ga <Plug>(EasyAlign)
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " Navigation
 """"""""""""""""""""""""""""""""""""""""""""""""""
-" Use JK instead of ESC
 inoremap jk <Esc>
 
 " Use ESC to exit neovim terminal
 tnoremap jk <C-\><C-n>
 
-" Navigation
+" Jump windows 
 noremap <C-k> <C-w><Up>
 noremap <C-j> <C-w><Down>
 noremap <C-l> <C-w><Right>
@@ -177,9 +169,16 @@ noremap <Leader>gp :vert Git pull<CR>
 noremap <Leader>gP! :vert Git push<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
+" StatusLine
+""""""""""""""""""""""""""""""""""""""""""""""""""
+set statusline=%<%f\ %h%m%r%=%-5.(%l,%c%)
+      \\ %{toupper(mode())}
+      \\ %{FugitiveStatusline()[5:-3]}
+
+""""""""""""""""""""""""""""""""""""""""""""""""""
 " Macros
 """"""""""""""""""""""""""""""""""""""""""""""""""
-" Surround word with double quotes
+" Surround word with double quotes then go to beginning of next line
 let @z = 'i"jklxx$a"jk0j'
 
 " Cheat Sheet!
@@ -189,16 +188,16 @@ let @z = 'i"jklxx$a"jk0j'
 " full path from $HOME
 "
 " :e + SPACE + CTRL-D is like :explore in quick-fix window
-" 
+"
 " SEXP
-" slurp/barf: >), <), >(, and <( 
+" slurp/barf: >), <), >(, and <(
 " form: >f <f
 " el:   >e <e
 "
 " PRs
 " :G difftool -y [BRANCH] opens tabs of all diffs
 "
-" REGISTERS 
+" REGISTERS
 " :reg to see all; "2p to paste, etc
 "
 " Tmux:
